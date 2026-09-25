@@ -676,9 +676,10 @@
                 imgbbApiKey: ""
             },
             music: [
-                { id: "m1", title: "ByeAlex - Fekete", url: "ByeAlex - Fekete.mp3" },
-                { id: "m2", title: "ByeAlex és a Slepp - Még mindig...", url: "ByeAlex és a Slepp - Még mindig... (Lotfi Begi Remix) OFFICIAL LYRIC VIDEO.mp3" },
-                { id: "m3", title: "Reggel", url: "music.mp3.mp3" }
+                { id: "m1", title: "Bruno Mars", url: "Bruno Mars - Just The Way You Are (Official Music Video).mp3" },
+                { id: "m2", title: "ByeAlex - Fekete", url: "ByeAlex - Fekete.mp3" },
+                { id: "m3", title: "ByeAlex Remix", url: "ByeAlex és a Slepp - Még mindig... (Lotfi Begi Remix) OFFICIAL LYRIC VIDEO.mp3" },
+                { id: "m4", title: "Kedvenc zene", url: "music.mp3.mp3" }
             ],
             letters: [
                 { id: "l1", title: "Az első levél neked", content: "Kedvesem, sosem feledem el azt a percet, amikor először megláttalak. Azóta az életem minden napja teli van fénnyel és dallammal.", author: "Te", date: "2024.03.15" }
@@ -702,28 +703,21 @@
         let currentPhotoIndex = 0;
         let currentAudioIndex = 0;
         let audioElement = new Audio();
-let isPlayingMusic = false;
+        let isPlayingMusic = false;
 
-let playlist = [
-    { title: "Bruno Mars", src: "Bruno Mars - Just The Way You Are (Official Music Video).mp3" },
-    { title: "ByeAlex - Fekete", src: "ByeAlex - Fekete.mp3" },
-    { title: "ByeAlex Remix", src: "ByeAlex és a Slepp - Még mindig... (Lotfi Begi Remix) OFFICIAL LYRIC VIDEO.mp3" },
-    { title: "Kedvenc zene", src: "music.mp3.mp3" }
-];
         const appId = 'romantic-memory-book-v2';
         const firebaseConfig = {
-  apiKey: "AIzaSyC0J687tsxkCxqRhIEbCncShvzzr9etGdc",
-  authDomain: "lovebubi-62266.firebaseapp.com",
-  projectId: "lovebubi-62266",
-  storageBucket: "lovebubi-62266.firebasestorage.app",
-  messagingSenderId: "425066942346",
-  appId: "1:425066942346:web:1f9c8f7375e5afff264273"
-}
+            apiKey: "AIzaSyC0J687tsxkCxqRhIEbCncShvzzr9etGdc",
+            authDomain: "lovebubi-62266.firebaseapp.com",
+            projectId: "lovebubi-62266",
+            storageBucket: "lovebubi-62266.firebasestorage.app",
+            messagingSenderId: "425066942346",
+            appId: "1:425066942346:web:1f9c8f7375e5afff264273"
+        };
         let db = null;
         let auth = null;
         let currentUser = null;
 
-        // HELYI TÖMÖRÍTŐ (Nagyobb, 1000px felbontás és 75%-os JPEG minőség a gyönyörű képekért)
         function compressImage(file, maxWidth = 1000, maxHeight = 1000, quality = 0.75) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -765,7 +759,6 @@ let playlist = [
             });
         }
 
-        // IMGBB FELHŐS KÉPFELTÖLTŐ FÜGGVÉNY (Eredeti HD minőség, 0 tárhely-fogyasztás)
         async function uploadToImgBB(file, apiKey) {
             const formData = new FormData();
             formData.append("image", file);
@@ -893,7 +886,6 @@ let playlist = [
             document.getElementById('mainWelcomeSubtitle').innerText = s.mainSubtitle || "";
             document.getElementById('countdownLabelText').innerText = s.countdownLabel || "Találkozásunkig:";
 
-            // Nyitó képernyő szövegei
             const opTitle = document.getElementById('openingTitleText');
             const opSub = document.getElementById('openingSubtitleText');
             const opBtn = document.getElementById('openingBtnLabel');
@@ -904,7 +896,6 @@ let playlist = [
             if (opBtn) opBtn.innerText = s.openingBtnText || "Belépés a Mesénkbe";
             if (opFoot) opFoot.innerText = s.openingFooter || "Készült tiszta szívvel, csak neked ❤️";
 
-            // Szerelmes levelek nézet szövegei
             const letTitle = document.getElementById('lettersViewTitle');
             const letSub = document.getElementById('lettersViewSubtitle');
 
@@ -1142,7 +1133,6 @@ let playlist = [
             renderThumbnailsStrip();
         }
 
-        // PHYSICAL 3D LEAF PAGE-TURN ANIMATION LOGIC
         function renderActivePhoto(direction = 'next', isInitial = false) {
             const album = appState.albums.find(a => a.id === currentAlbumId);
             if (!album || !album.photos || album.photos.length === 0) return;
@@ -1156,7 +1146,6 @@ let playlist = [
 
             document.getElementById('photoProgressIndicator').innerText = `${currentPhotoIndex + 1} / ${album.photos.length}`;
 
-            // Thumbnails strip update
             document.querySelectorAll('.thumb-item').forEach((el, idx) => {
                 if (idx === currentPhotoIndex) {
                     el.classList.add('ring-2', 'ring-blush-600', 'scale-105');
@@ -1168,17 +1157,14 @@ let playlist = [
             const oldPhotoSrc = activeImg.src;
             const newPhotoSrc = photo.image;
 
-            // Direct render if initial or same image
             if (isInitial || !oldPhotoSrc || oldPhotoSrc === newPhotoSrc || oldPhotoSrc.includes('placehold.co')) {
                 activeImg.src = newPhotoSrc;
                 return;
             }
 
-            // Remove any ongoing animation leaf overlays
             const existingLeaves = container.querySelectorAll('.flip-leaf');
             existingLeaves.forEach(l => l.remove());
 
-            // Build the 3D Flipping Leaf Overlay with Front and Back faces
             const leaf = document.createElement('div');
             leaf.className = `flip-leaf ${direction === 'next' ? 'animate-flip-next' : 'animate-flip-prev'}`;
 
@@ -1200,11 +1186,8 @@ let playlist = [
             `;
 
             container.appendChild(leaf);
-
-            // Instantly load the new photo underneath on the static book page
             activeImg.src = newPhotoSrc;
 
-            // Remove leaf overlay cleanly when physical turn completes (750ms)
             setTimeout(() => {
                 if (leaf && leaf.parentNode) {
                     leaf.remove();
@@ -1468,7 +1451,6 @@ let playlist = [
 
             renderAdminMusicList();
 
-            // Szöveges beállítások feltöltése
             const s = appState.settings || {};
             document.getElementById('adminImgbbApiKeyInput').value = s.imgbbApiKey || "";
 
@@ -1620,10 +1602,8 @@ let playlist = [
                 try {
                     let photoUrl = "";
                     if (apiKey) {
-                        // Ingyenes felhős feltöltés HD minőségben
                         photoUrl = await uploadToImgBB(file, apiKey);
                     } else {
-                        // Helyi szép tömörítés
                         photoUrl = await compressImage(file, 1000, 1000, 0.75);
                     }
 
@@ -1690,7 +1670,6 @@ let playlist = [
                 if (appState.letters && appState.letters[idx]) appState.letters[idx].content = input.value;
             });
 
-            // Nyitó képernyő & Szöveges beállítások begyűjtése
             const opTitle = document.getElementById('adminOpeningTitleInput');
             const opSub = document.getElementById('adminOpeningSubtitleInput');
             const opBtn = document.getElementById('adminOpeningBtnInput');
